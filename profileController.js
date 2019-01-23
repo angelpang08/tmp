@@ -1,6 +1,6 @@
 
         var outer_dataset = [
-            {name: 'IE', percent: 39.10},
+            {name: 'IE', percent: 10},
             {name: 'Chrome', percent: 32.51},
             {name: 'Safari', percent: 13.68},
             {name: 'Firefox', percent: 8.71}
@@ -69,15 +69,28 @@
             })
         ;
 
-            path.append("text")
-			    .attr("transform",function(d){
+            svg_donut.selectAll("text.out")
+                .data(pie(outer_dataset)).enter()
+                .append("text").attr("class","out")
+			    .attr("transform", function(d){
 			        return "translate(" + arc.centroid(d) + ")";
 			    })
 			    .attr("text-anchor","middle")
 			    .text(function(d){
                     console.log(d.data.name);
-			        return d.data.name;
-			    }).style("fill", "#fff");;
+			        return d.data.name+d.data.percent;
+			    }).style("fill", "black").style('opacity', 1);
 
-        
+        svg_donut.selectAll("text.in")
+                .data(pie(inner_dataset)).enter()
+                .append("text").attr("class","in")
+			    .attr("transform", function(d){
+			        return "translate(" + arc2.centroid(d) + ")";
+			    })
+			    .attr("text-anchor","middle")
+			    .append("p").text(function(d){
+                    console.log(d.data.name);
+			        return (d.data.name);
+			    });
+
 
