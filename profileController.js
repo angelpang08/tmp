@@ -51,13 +51,13 @@
                 transform: 'translate(' + w / 2 + ',' + h / 2 + ')'
             });
 
-        var g_arc=svg_donut.selectAll('.arc')
+        var g_arc_out=svg_donut.selectAll('.arc_out')
             .data(pie(outer_dataset ))
             .enter()
             .append("g")
-            .attr('class','arc')
+            .attr('class','arc_out')
             .on("mouseenter", function (d) {
-                d3.select(this)
+                d3.select(this).select("path")
                     .attr("stroke", "white")
                     .transition()
                     .duration(200)
@@ -65,13 +65,17 @@
                     
             })
             .on("mouseleave", function (d) {
-                 d3.select(this).transition()
+                 d3.select(this).select("path")
+                     .transition()
                      .duration(200)
                      .attr("d", arc);
              })
+            .on('click',function(d){
+                alert(d.data.name);
+            })
             ;
 
-        g_arc.append('path')
+        g_arc_out.append('path')
             .attr('class', 'outer')
             .attr("stroke", "#fff")
             .attr({
@@ -84,7 +88,7 @@
             ;
 
                 
-        g_arc.append("text").attr("class","out")
+        g_arc_out.append("text").attr("class","out")
                 .attr("transform", function(d) { 
                         var midAngle = d.startAngle/2 + d.endAngle/2 <= Math.PI ? d.startAngle/2 + d.endAngle/2 : d.startAngle/2  + d.endAngle/2 + Math.PI ;
                         return "translate(" + arc.centroid(d)[0] + "," + arc.centroid(d)[1] + ") rotate(-90) rotate(" + (midAngle * 180/Math.PI) + ")";
