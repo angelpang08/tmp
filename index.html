@@ -1,22 +1,32 @@
-<html>
-    <head> 
-        <meta charset="utf-8"> 
-        <title>HelloWorld</title> 
-        <style>
-        	
+<!DOCTYPE html>
+<html ng-app="dynamicFieldsPlugin">
 
-        </style>
-  </head> 
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    <body>
-    	<div id="externalCollaborationDonutDisplay"> </div>
-        <div id="donut-chart"></div>
+  <head>
+    <link data-require="bootstrap@3.3.2" data-semver="3.3.2" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+    <script data-require="bootstrap@3.3.2" data-semver="3.3.2" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script data-require="jquery@2.1.3" data-semver="2.1.3" src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script data-require="angular.js@1.3.15" data-semver="1.3.15" src="https://code.angularjs.org/1.3.15/angular.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js"></script>
+  </head>
 
-        
-        
-        
-    </body>
-
-    <script src="profileController.js" charset="utf-8"></script>
+  <body>
+    
+    <div ng-controller="dynamicFields" class="container">
+      
+      <h1>Dynamic Form Fields Creation Plugin</h1>
+      
+      <div class="form-group" data-ng-repeat="choice in choices">
+        <label for="choice" ng-show="showChoiceLabel(choice)">Choices</label>
+        <button ng-show="showAddChoice(choice)" ng-click="addNewChoice()">Add Choice</button>
+        <button ng-click="removeNewChoice()">Remove Choice</button>
+        <input type="text" ng-modal="{{choice.name}}" name="" placeholder="Enter a restaurant name" value="{{choice.id}}">
+      </div>
+      
+    </div>
+    <!--jQuery Scripts -->
+    <script src="app.js"></script>
+    
+  </body>
 
 </html>
