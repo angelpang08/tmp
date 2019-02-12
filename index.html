@@ -17,11 +17,25 @@
       <h1>Dynamic Form Fields Creation Plugin</h1>
       
       <div class="form-group" data-ng-repeat="choice in choices">
-        <label for="choice" ng-show="showChoiceLabel(choice)">Choices</label>
-        <button ng-show="showAddChoice(choice)" ng-click="addNewChoice()">Add Choice</button>
-        <button ng-click="removeNewChoice()">Remove Choice</button>
-        <input type="text" ng-modal="{{choice.name}}" name="" placeholder="Enter a restaurant name" value="{{choice.id}}">
+        <button ng-click="removeNewChoice(choice)">Remove Choice</button> 
+        <div> {{choice.name}} </div>
+        <div> {{choice.id}} </div>
       </div>
+      <div>
+      {{choices}}
+      </div>
+
+
+      <input type="text" ng-model="newchoice.name" placeholder="enter name" >
+      <div>
+        {{newchoice.name}}
+      </div>
+      <input type="text" ng-model="newchoice.id"   placeholder="enter id">
+      <div>
+        {{newchoice.id}}
+      </div>
+
+      <button ng-click="addNewChoice()" > add</button>
       
     </div>
     <!--jQuery Scripts -->
