@@ -1,0 +1,41 @@
+<div class="fql-group">
+    <div class="fql-input-group">
+        <input id="fql-input" autocomplete="off" ng-blur="disableTooltip()" ng-model="fqlInput" ng-click="inputChange($event)" ng-keyup="inputChange($event)"/>
+    </div>
+    <div class="fql-tooltip-group">
+        <div id="fql-tooltip-position">{{fqlInput_beforeWord}}</div>
+        <div id="fql-tooltip-autocomplete" ng-if="showAutoComplete">
+            <div class="fql-autoComplete-item" ng-repeat="autoCompleteWord in autoCompleteList" ng-click="addtoInput(autoCompleteWord)">
+                {{autoCompleteWord }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .fql-group{
+        display: inline-block;
+        width: 100%;
+        padding: 5px;
+    }
+    #fql-input{
+        width: 80%;
+        padding: 0 3px;
+    }
+    #fql-tooltip-position{
+        display: inline-block;
+        visibility: hidden;
+        padding: 0 3px;
+    }
+    #fql-tooltip-autocomplete{
+        border: 1px solid black;
+        position: relative;
+        left: -5px;
+        width: 230px;
+        display: inline-block;
+        flex-direction: column;
+    }
+    .fql-autoComplete-item{
+        padding: 0 3px;
+    }
+</style>
