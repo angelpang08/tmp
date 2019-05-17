@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+<body ng-app="myApp" ng-controller="myCtrl">
+    <div>
+        <multi-select-with-checkbox group-and-option="group_option" set-item="selectItems"/>
+    </div>
+
+
+<script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function($scope) {
+        //$scope.selectItems = [];// [] would be no select items // initial should be selecte all 
+        $scope.group_option=
+        [
+            {// group level obj
+                group_name : "group1",
+                group_options:[
+                    {
+                        display_label:'option 1',
+                        return_value:'chose 1',
+                    },
+                    {
+                        display_label: 'option 2',
+                        return_value : 'chose 2'
+                    }   
+                ]
+            },
+            {
+                group_name : "group2",
+                group_options:[
+                    {
+                        display_label:'option 3',
+                        return_value:'chose 3',
+                    },
+                    {
+                        display_label: 'option 4',
+                        return_value : 'chose 4'
+                    }   
+                ]
+            }
+        ]
+        console.log($scope.selectObj);
+    });
+</script>
+<script src="multiSelectCheckbox.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<div style="box-sizing: border-box;">
+    this is a select with check box
+</div>
+<div class="multi-select-with-checkbox">
+   
+    <div class="items_holder">this is place holder</div>
+    <div class="dropdown">
+        <div class = "filter_input"><input ng-model="filterInput"></div>
+        
+        <div class="Select_all" ng-show="!filterInput" >
+            <input type="checkbox" value="Select all" id="Select_all" >
+            Select all
+        </div>
+        <!--- group and options -->
+        <select-group ng-repeat="group in $ctrl.groupAndOption" group-name="group1">
+            <select-option option-name="option1" group-name="group1"></select-option>
+            <select-option option-obj="option2" option-selected=""group-name="group1"></select-option>
+        </select-group>
+    </div>
+</div>
+
+<style>
+    
+    .items_holder{
+        box-sizing: border-box;
+        border: 1px solid black;
+        width: 300px;
+    }
+    
+    .dropdown{
+        box-sizing: border-box;
+        border: 1px solid black;
+        width: 300px;
+        padding: 3px 10px;
+    }
+    .filter_input{
+    }
+    .filter_input input{
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+
+</style>

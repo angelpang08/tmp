@@ -1,0 +1,8 @@
+<div class="group">
+    <input id="group_{{$ctrl.groupName}}" 
+           type="checkbox" 
+           ng-change="groupToggle($ctrl.groupName)">
+    
+    {{$ctrl.groupName}}
+</div>
+<div class="options" ng-transclude></div>
