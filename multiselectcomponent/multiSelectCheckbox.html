@@ -8,13 +8,17 @@
         <div class = "filter_input"><input ng-model="filterInput"></div>
         
         <div class="Select_all" ng-show="!filterInput" >
-            <input type="checkbox" value="Select all" id="Select_all" >
+            <checkbox-three-state checkbox-state="$ctrl.selectAll" change-state-to="$ctrl.allToggle()"></checkbox-three-state>
             Select all
         </div>
         <!--- group and options -->
-        <select-group ng-repeat="group in $ctrl.groupAndOption" group-name="group1">
-            <select-option option-name="option1" group-name="group1"></select-option>
-            <select-option option-obj="option2" option-selected=""group-name="group1"></select-option>
+        <select-group ng-repeat="group in $ctrl.groupAndOption" group-obj='group'>
+<!--                      group-name="group.groupName" group-select="group.select">-->
+            <select-option ng-repeat="option in group.groupOptions" option-obj='option' 
+                           group-name="group.groupName"/>
+<!--
+                           option-name="option.displayLabel" option-selected="option.select"  
+-->
         </select-group>
     </div>
 </div>

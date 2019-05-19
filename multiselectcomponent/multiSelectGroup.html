@@ -1,8 +1,11 @@
 <div class="group">
-    <input id="group_{{$ctrl.groupName}}" 
-           type="checkbox" 
-           ng-change="groupToggle($ctrl.groupName)">
-    
-    {{$ctrl.groupName}}
+    <checkbox-three-state checkbox-state="$ctrl.groupObj.select" change-state-to="$ctrl.groupClickHandle()"></checkbox-three-state>
+    <span>{{$ctrl.groupObj.groupName}}</span>
 </div>
 <div class="options" ng-transclude></div>
+<style>
+    .group{
+        margin-left: 20px;
+    }
+
+</style>

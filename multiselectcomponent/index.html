@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="lodash.js"></script>
+</head>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+    
 <body ng-app="myApp" ng-controller="myCtrl">
     <div>
         <multi-select-with-checkbox group-and-option="group_option" set-item="selectItems"/>
@@ -10,40 +15,43 @@
 <script>
     var app = angular.module('myApp', []);
     app.controller('myCtrl', function($scope) {
-        //$scope.selectItems = [];// [] would be no select items // initial should be selecte all 
+        //$scope.selectItems = [];// [] and initial should be selecte all 
         $scope.group_option=
         [
             {// group level obj
-                group_name : "group1",
-                group_options:[
+                groupName : "group1",
+                //select: checked;
+                groupOptions:[
                     {
-                        display_label:'option 1',
-                        return_value:'chose 1',
+                        optionName:'option 1',
+                        optionValue:'chose 1',
+                       // select: true
                     },
                     {
-                        display_label: 'option 2',
-                        return_value : 'chose 2'
+                        optionName: 'option 2',
+                        optionValue : 'chose 2'
                     }   
                 ]
             },
             {
-                group_name : "group2",
-                group_options:[
+                groupName : "group2",
+                groupOptions:[
                     {
-                        display_label:'option 3',
-                        return_value:'chose 3',
+                        optionName:'option 3',
+                        optionValue:'chose 3',
                     },
                     {
-                        display_label: 'option 4',
-                        return_value : 'chose 4'
+                        optionName: 'option 4',
+                        optionValue : 'chose 4'
                     }   
                 ]
             }
         ]
-        console.log($scope.selectObj);
+    
     });
 </script>
 <script src="multiSelectCheckbox.js"></script>
+<script src="checkboxThreeState.js"></script>
 
 </body>
 </html>

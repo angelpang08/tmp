@@ -1,6 +1,11 @@
-<div class="options">
-    <input type="checkbox" 
-           id="option_{{$ctrl.optionName}}" 
-           ng-change="modifyArrayToPost($ctrl.optionName)">
-    {{$ctrl.optionName}} in {{$ctrl.groupName}}
+<div class="option">
+    <checkbox-three-state checkbox-state="$ctrl.optionObj.select" 
+                          change-state-to="$ctrl.optionClickHandle(newState)"></checkbox-three-state>
+    {{$ctrl.optionObj.optionName}} in {{$ctrl.groupName}}
 </div>
+
+<style>
+    .option{
+        margin-left: 40px;
+    }
+</style>
