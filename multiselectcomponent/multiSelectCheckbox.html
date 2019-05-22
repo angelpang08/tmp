@@ -1,19 +1,19 @@
 
 <div class="multi-select-with-checkbox">
    
-    <div class="items_holder" ng-click="toggleDropdown($event)">this is place holder</div>
+    <div class="items_holder" ng-click="toggleDropdown($event)">{{placeHolder}}</div>
     
     <div class="dropdown" ng-show="showDropdown" ng-click="dropdownClick($event)">
-        <div class = "filter_input"><input ng-model="filterInput">{{showDropdown}}</div>
+        <div class = "filter_input"><input ng-model="filterInput"></div>
         
         <div class="Select_all" ng-show="!filterInput" >
             <checkbox-three-state checkbox-state="$ctrl.selectAll" change-state-to="$ctrl.allToggle(newState)"></checkbox-three-state>
             Select all
         </div>
         <!--- group and options -->
-        <select-group ng-repeat="group in $ctrl.groupAndOption" group-obj='group'>
+        <select-group ng-repeat="group in $ctrl.groupAndOption" group-obj='group' ng-show="showGroup(group)">
 <!--                      group-name="group.groupName" group-select="group.select">-->
-            <select-option ng-repeat="option in group.groupOptions" option-obj='option' 
+            <select-option ng-repeat="option in group.groupOptions | filter: {optionName: filterInput}" option-obj='option' 
                            group-name="group.groupName"/>
 <!--
                            option-name="option.displayLabel" option-selected="option.select"  

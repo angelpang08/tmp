@@ -7,16 +7,12 @@
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
     
 <body ng-app="myApp" ng-controller="myCtrl">
-    <p>
-        To do list: 
-            1. add place holder
-            2. add filter
-            3. callback
-    </p>
     <div>
         <multi-select-with-checkbox group-and-option="group_option" 
                                     set-item="selectItems"
-                                    select-item-callback="selectCallback(callbackItems)">
+                                    none-is-all = "true"
+                                    select-item-callback="selectCallback(callbackItems, isSelectAll)"
+                                    unit="choice">
         </multi-select-with-checkbox>
     </div>
 
@@ -32,7 +28,7 @@
                 //select: checked;
                 groupOptions:[
                     {
-                        optionName:'option 1',
+                        optionName:'opt1',
                         optionValue:'chose 1',
                        // select: true
                     },
@@ -58,8 +54,9 @@
         ]
         
         
-        $scope.selectCallback = function(callbackItems){
+        $scope.selectCallback = function(callbackItems,isSelectAll){
             console.log(callbackItems);
+            console.log(isSelectAll);
         }
     
     });

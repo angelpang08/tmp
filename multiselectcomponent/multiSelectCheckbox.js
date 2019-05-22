@@ -7,7 +7,9 @@ angular.module('myApp')
         groupAndOption:'<',
         setItem:'<',
         readyToSet:'<',
-        selectItemCallback: '&'
+        noneIsAll: '<',
+        selectItemCallback: '&',
+        unit: '@'
     },
     controller: selectController
 })
@@ -46,39 +48,43 @@ angular.module('myApp')
 
 ;
 
-function selectController($window,$scope){
+function selectController($window,$scope,$filter){
     var ctrl = this;
     
     
     /*************** dropdown control ********************/
     
     function addCloseDropdownEventListener() {
-        console.log('add listener');
+        //console.log('add listener');
         $window.addEventListener('click',closeDropdown);
     } 
     function removeCloseDropdownEventListener() {
-        console.log('remove listener');
+        //console.log('remove listener');
         $window.removeEventListener('click', closeDropdown);
     }
+    
     function closeDropdown(){
         console.log('closeDropdown');
         $scope.showDropdown = false;
         $scope.$apply();
         removeCloseDropdownEventListener();
+        
+        selectItemCallback();
     }
     
-    $scope.toggleDropdown = function($event){
+    $scope.toggleDropdown = function($event){ //for place holder
         //console.log('toggleDropdown, now is ',$scope.showDropdown);
         $scope.showDropdown = !$scope.showDropdown;
         if($scope.showDropdown){
             addCloseDropdownEventListener();
         }else{
             removeCloseDropdownEventListener();
+            selectItemCallback();
         }
         $event.stopPropagation();
     }
     
-    $scope.dropdownClick = function($event){
+    $scope.dropdownClick = function($event){ // dropdown area
         //console.log('showDropdown now is ',$scope.showDropdown);
         //console.log('dropdown',$event.target);
         $event.stopPropagation();
@@ -118,7 +124,7 @@ function selectController($window,$scope){
         }
         ctrl.selectAll = newState;
         
-        selectItemCallback();
+        updatePlaceHolder();
     };
     
     ctrl.groupToggle = function(group, newState){
@@ -131,8 +137,7 @@ function selectController($window,$scope){
             console.log('error: groupToggle to wrong state: ',newState);
         }
         updateAll();
-        
-        selectItemCallback();
+        updatePlaceHolder();
     };
     
     ctrl.optionToggle = function(option, newState, groupName){
@@ -140,23 +145,24 @@ function selectController($window,$scope){
         //console.log("option old select",option.select);
         console.log('option newState',newState);
         
-        option.select = newState;
-        if(option.select === checkbox_checked){
-            addOption(option.optionValue);
+        if( newState === checkbox_checked){
+            selectOption(option);
         }else{
-            removeOption(option.optionValue);
+            clearOption(option);
         }
-        
+    
         var group = findGroup(groupName);
         updateGroup(group); // call updateAll() in the updateGroup
         
-        selectItemCallback();
+        updatePlaceHolder();
         
     };
     
     function selectOption(option){
         option.select = checkbox_checked;
         addOption(option.optionValue);
+        mapOptionValueName[option.optionValue]=option.optionName;
+        
     }
     function clearOption(option){
         option.select = checkbox_unchecked;
@@ -179,10 +185,10 @@ function selectController($window,$scope){
         var selectAll=true;
         var hasSelect=false;
 
-        _.each(group.groupOptions,function(option){``
+        _.each(group.groupOptions,function(option){
             if(option.select === checkbox_checked){
                 hasSelect = true;
-            } else{
+            }else{
                 selectAll = false;
             }
         });
@@ -275,25 +281,84 @@ function selectController($window,$scope){
         }
         ctrl.selectItemValueList.splice(i,1);  
     }
-    function selectItemCallback(){
-        ctrl.selectItemCallback({"callbackItems" : angular.copy(ctrl.selectItemValueList)});
-    }
     
+    function selectItemCallback(){
+        if(ctrl.noneIsAll && ctrl.selectAll === checkbox_unchecked){
+            selectAll();
+        }
+        
+        ctrl.selectItemCallback({
+            "callbackItems" : angular.copy(ctrl.selectItemValueList),
+            "isSelectAll" : ctrl.selectAll === checkbox_checked
+        });
+    }
+    /*************** placeholder *********************/
+    
+    function updatePlaceHolder(){
+        
+        if (!ctrl.unit){
+            ctrl.unit = 'options'
+        }
+        
+        var placeHolder = "Filter " + ctrl.unit + " ...";
+        if(ctrl.selectItemValueList.length ===0 ){
+            if(ctrl.noneIsAll){
+                placeHolder = "All "+ctrl.unit;
+            }
+        }else if(ctrl.selectItemValueList.length === 1 ){
+            var optionValue = ctrl.selectItemValueList[0];
+            console.log(mapOptionValueName);
+            placeHolder = mapOptionValueName[optionValue];
+            
+        }else if(ctrl.selectAll === checkbox_checked){
+            placeHolder = "All "+ ctrl.unit;
+        }else{
+             placeHolder = ctrl.selectItemValueList.length + " "+ ctrl.unit;
+        }
+        //console.log('placeHolder: ',placeHolder);
+        
+        $scope.placeHolder = placeHolder;
+    }
         
     /******************* init ********************/
+    
             
-    function setvValue(choseItemList){
+    function setValue(){
+        if(!ctrl.setItem || Array.isArray(ctrl.setItem)){
+            ctrl.selectItemValueList =[];
+        }else{
+            ctrl.selectItemValueList = [ctrl.setItem];
+        }
         
-    }
-    
-    function prepareData( selsectAll ){
+        if(ctrl.selectItemValueList.length===0 ){
+            if(ctrl.noneIsAll){
+                selectAll();
+            }else{
+                clearAll();
+            }
+            return;
+        }
         _.each(ctrl.groupAndOption,function(group){
-            
-            
-        });
-            
+            _.each(group, function(option){
+                if(ctrl.selectItemValueList.indexOf(option.optionValue)<0){
+                    selectOption(option);
+                }else{
+                    clearOption(option);
+                }
+            });
+        });     
     }
     
+    
+    mapOptionValueName={};
+    setValue();
+    updatePlaceHolder();
+    
+    /**************** item filter ***************/
+    
+    $scope.showGroup = function(group){
+        return($filter('filter')(group.groupOptions,{optionName: $scope.filterInput})).length > 0;
+    }
    
 }
 
