@@ -1,5 +1,6 @@
 <div class="group">
-    <checkbox-three-state checkbox-state="$ctrl.groupObj.select" change-state-to="$ctrl.groupClickHandle()"></checkbox-three-state>
+    <checkbox-three-state checkbox-state="$ctrl.groupObj.select" 
+                          change-state-to="$ctrl.groupClickHandle(newState)"></checkbox-three-state>
     <span>{{$ctrl.groupObj.groupName}}</span>
 </div>
 <div class="options" ng-transclude></div>

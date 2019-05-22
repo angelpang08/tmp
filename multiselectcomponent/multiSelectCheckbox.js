@@ -6,7 +6,8 @@ angular.module('myApp')
     bindings: {
         groupAndOption:'<',
         setItem:'<',
-        checkItemsCallback: '&'
+        readyToSet:'<',
+        selectItemCallback: '&'
     },
     controller: selectController
 })
@@ -45,63 +46,122 @@ angular.module('myApp')
 
 ;
 
-function selectController(){
+function selectController($window,$scope){
+    var ctrl = this;
+    
+    
+    /*************** dropdown control ********************/
+    
+    function addCloseDropdownEventListener() {
+        console.log('add listener');
+        $window.addEventListener('click',closeDropdown);
+    } 
+    function removeCloseDropdownEventListener() {
+        console.log('remove listener');
+        $window.removeEventListener('click', closeDropdown);
+    }
+    function closeDropdown(){
+        console.log('closeDropdown');
+        $scope.showDropdown = false;
+        $scope.$apply();
+        removeCloseDropdownEventListener();
+    }
+    
+    $scope.toggleDropdown = function($event){
+        //console.log('toggleDropdown, now is ',$scope.showDropdown);
+        $scope.showDropdown = !$scope.showDropdown;
+        if($scope.showDropdown){
+            addCloseDropdownEventListener();
+        }else{
+            removeCloseDropdownEventListener();
+        }
+        $event.stopPropagation();
+    }
+    
+    $scope.dropdownClick = function($event){
+        //console.log('showDropdown now is ',$scope.showDropdown);
+        //console.log('dropdown',$event.target);
+        $event.stopPropagation();
+        
+    }
+    
+    $scope.$on('$destroy', function() {
+        console.log("destroy");
+        if($scope.showDropdown){
+            removeCloseDropdownEventListener();
+        }
+      });
+    
+    
+    
+    /**************************** select checkbox handle *********************/
+    
     /***
     * assume 
     ***/
-    var chechbox_checked= 'checked';
-    var chechbox_unchecked = 'unChecked';
-    var chechbox_intermidate = 'indeterminate';
 
-
-
-
-    var ctrl = this;
-
+    var checkbox_checked= 'checked';
+    var checkbox_unchecked = 'unChecked';
+    var checkbox_intermidate = 'indeterminate';
     
-    function setvValue(choseItemList){
-        
-    }
-    
-    function prepareData(){
-        
-        
-    }
-    
+    ctrl.selectItemValueList = [];
+
     ctrl.allToggle = function(newState){
-        //console.log('click all select');
+        console.log('click all select, newState: ',newState);
+        
         if(newState === checkbox_checked){
-            clearAll();
-        }else if(newState === checkbox_unchecked){
             selectAll();
+        }else if(newState === checkbox_unchecked){
+            clearAll();
         }else{
             console.log('error: allToggle to wrong state');
         }
+        ctrl.selectAll = newState;
+        
+        selectItemCallback();
     };
     
     ctrl.groupToggle = function(group, newState){
-        //console.log('group: ',group.groupName);
-        //console.log(group.select);
+        console.log('group new state:',newState);
         if(newState === checkbox_checked){
             selectGroup(group);
         }else if(newState === checkbox_unchecked){ 
             clearGroup(group);
         }else{
-            console.log('error: groupToggle to wrong state');
+            console.log('error: groupToggle to wrong state: ',newState);
         }
         updateAll();
+        
+        selectItemCallback();
     };
     
     ctrl.optionToggle = function(option, newState, groupName){
-        console.log('group: ',groupName,' option：',option.optionName);
-        console.log(option.select);
+        //console.log('group: ',groupName,' option：',option.optionName);
+        //console.log("option old select",option.select);
+        console.log('option newState',newState);
         
         option.select = newState;
+        if(option.select === checkbox_checked){
+            addOption(option.optionValue);
+        }else{
+            removeOption(option.optionValue);
+        }
         
         var group = findGroup(groupName);
         updateGroup(group); // call updateAll() in the updateGroup
         
+        selectItemCallback();
+        
     };
+    
+    function selectOption(option){
+        option.select = checkbox_checked;
+        addOption(option.optionValue);
+    }
+    function clearOption(option){
+        option.select = checkbox_unchecked;
+        removeOption(option.optionValue);
+    }
     
     function findGroup(groupName){
         var groupObj={};
@@ -120,7 +180,7 @@ function selectController(){
         var hasSelect=false;
 
         _.each(group.groupOptions,function(option){``
-            if(option.select === chechbox_checked){
+            if(option.select === checkbox_checked){
                 hasSelect = true;
             } else{
                 selectAll = false;
@@ -129,9 +189,9 @@ function selectController(){
 
         var newSelect = checkbox_unchecked;
         if(selectAll){
-            newSelect = chechbox_checked;
+            newSelect = checkbox_checked;
         }else if(hasSelect){
-            newSelect = chechbox_intermidate;
+            newSelect = checkbox_intermidate;
         }
 
         if(newSelect !== group.select){
@@ -144,14 +204,14 @@ function selectController(){
     function selectGroup(group){
         group.select = checkbox_checked;
         _.each(group.groupOptions,function(option){
-            option.select = checkbox_checked;
+            selectOption(option);
         });
     }
     
     function clearGroup(group){
         group.select = checkbox_unchecked;
         _.each(group.groupOptions,function(option){
-            option.select = checkbox_unchecked;
+            clearOption(option);
         });    
     }
     
@@ -160,23 +220,25 @@ function selectController(){
         var selectAll=true;
         var hasSelect=false;
 
-        _.each($ctrl.groupAndOption, function(group){
+        _.each(ctrl.groupAndOption, function(group){
 
             if(group.select === checkbox_checked){
                 hasSelect = true;
-            }else if(group.select === chechbox_intermidate){
+            }else if(group.select === checkbox_intermidate){
+                hasSelect = true;
                 selectAll = false;
-            }else if(group.select === chechbox_unchecked){
+            }else //if(group.select === checkbox_unchecked)
+            {
                 selectAll = false;
             }
         });
 
         if(selectAll){
-            ctrl.selectAll = chechbox_checked;
+            ctrl.selectAll = checkbox_checked;
         }else if(hasSelect){
-            ctrl.selectAll = chechbox_intermidate;
+            ctrl.selectAll = checkbox_intermidate;
         }else{
-            ctrl.selectAll = chechbox_unchecked;
+            ctrl.selectAll = checkbox_unchecked;
         }
         
     }
@@ -191,9 +253,45 @@ function selectController(){
     
     function clearAll(){
         ctrl.selectAll = checkbox_unchecked;
+        ctrl.selectItemValueList = [];
+        
         _.each(ctrl.groupAndOption, function(group){
             clearGroup(group);
         });
+    }
+    
+    /***************** select result **************/
+    function addOption(optionValue){
+        var i = ctrl.selectItemValueList.indexOf(optionValue);
+        if(i>= 0){
+            return;
+        }
+        ctrl.selectItemValueList.push(optionValue);
+    }
+    function removeOption(optionValue){
+        var i = ctrl.selectItemValueList.indexOf(optionValue);
+        if(i<0){
+            return;
+        }
+        ctrl.selectItemValueList.splice(i,1);  
+    }
+    function selectItemCallback(){
+        ctrl.selectItemCallback({"callbackItems" : angular.copy(ctrl.selectItemValueList)});
+    }
+    
+        
+    /******************* init ********************/
+            
+    function setvValue(choseItemList){
+        
+    }
+    
+    function prepareData( selsectAll ){
+        _.each(ctrl.groupAndOption,function(group){
+            
+            
+        });
+            
     }
     
    
@@ -202,8 +300,8 @@ function selectController(){
 
 function selectGroupController() {
     this.groupClickHandle = function(newState){
-        console.log('call groupToggle');
-        this.multiSelectCtrl.groupToggle(this.groupObj,newState);
+        console.log('call groupToggle, newState',newState);
+        this.multiSelectCtrl.groupToggle(this.groupObj, newState);
     };
     
 }

@@ -1,14 +1,13 @@
-<div style="box-sizing: border-box;">
-    this is a select with check box
-</div>
+
 <div class="multi-select-with-checkbox">
    
-    <div class="items_holder">this is place holder</div>
-    <div class="dropdown">
-        <div class = "filter_input"><input ng-model="filterInput"></div>
+    <div class="items_holder" ng-click="toggleDropdown($event)">this is place holder</div>
+    
+    <div class="dropdown" ng-show="showDropdown" ng-click="dropdownClick($event)">
+        <div class = "filter_input"><input ng-model="filterInput">{{showDropdown}}</div>
         
         <div class="Select_all" ng-show="!filterInput" >
-            <checkbox-three-state checkbox-state="$ctrl.selectAll" change-state-to="$ctrl.allToggle()"></checkbox-three-state>
+            <checkbox-three-state checkbox-state="$ctrl.selectAll" change-state-to="$ctrl.allToggle(newState)"></checkbox-three-state>
             Select all
         </div>
         <!--- group and options -->

@@ -7,8 +7,17 @@
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
     
 <body ng-app="myApp" ng-controller="myCtrl">
+    <p>
+        To do list: 
+            1. add place holder
+            2. add filter
+            3. callback
+    </p>
     <div>
-        <multi-select-with-checkbox group-and-option="group_option" set-item="selectItems"/>
+        <multi-select-with-checkbox group-and-option="group_option" 
+                                    set-item="selectItems"
+                                    select-item-callback="selectCallback(callbackItems)">
+        </multi-select-with-checkbox>
     </div>
 
 
@@ -47,6 +56,11 @@
                 ]
             }
         ]
+        
+        
+        $scope.selectCallback = function(callbackItems){
+            console.log(callbackItems);
+        }
     
     });
 </script>
