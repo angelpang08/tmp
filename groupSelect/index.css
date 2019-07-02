@@ -1,0 +1,66 @@
+
+
+.CheckboxItem_box{
+  border: 1px solid gray;
+  width: 22px;
+  height:22px;
+  box-sizing: border-box;
+  display: inline-block;
+}
+
+.CheckboxItem_icon{
+  width: 20px;
+  height:20px;
+}
+
+
+.hidden{
+    display:none;
+}
+
+.dropdownContainer{
+    border: 3px solid black;
+}
+
+.content {
+    background-color: #F1F1F1;
+    height: calc(100% - 100px);
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    top: 100px;
+    left: 200px;
+    right: 0;
+    position: fixed;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.topBar{
+    height: 50px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.topBar .leftPart{
+	height: 34px;
+    position: fixed;
+    top: 10px;
+    left: 15px;
+}
+
+.root{
+	overflow: hidden;
+}
+
+
+body {
+	margin: 0;
+    padding-right: 0 !important;
+    font-family: 'Lato';
+    font-size: 12px;
+    line-height: 1.72222;
+    color: #000;
+    background-color: #fff;
+}
