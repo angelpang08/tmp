@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="lodash.js"></script>
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+    
+<body ng-app="myApp" ng-controller="myCtrl">
+    <div ng-click="changeGroup_option()" style="border: 2px solid black;">
+        <warper-level callback="" group-and-option="group_option">
+            <group-level>
+                <option-level>keyi
+                </option-level>
+            </group-level>
+        </warper-level>
+    </div>
+
+
+<script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function($scope) {
+        //$scope.selectItems = [];// [] and initial should be selecte all 
+        
+        $scope.changeGroup_option=function(){
+            console.log('click change');
+            $scope.group_option[0].groupName = "changeed"; 
+            console.log($scope.group_option);
+        }
+        
+        $scope.group_option=
+        [
+            {// group level obj
+                groupName : "group1",
+                //select: checked;
+                groupOptions:[
+                    {
+                        optionName:'opt1',
+                        optionValue:'chose 1',
+                       // select: true
+                    },
+                    {
+                        optionName: 'option 2',
+                        optionValue : 'chose 2'
+                    }   
+                ]
+            },
+            {
+                groupName : "group2",
+                groupOptions:[
+                    {
+                        optionName:'option 3',
+                        optionValue:'chose 3',
+                    },
+                    {
+                        optionName: 'option 4',
+                        optionValue : 'chose 4'
+                    }   
+                ]
+            }
+        ]
+        
+        
+        $scope.selectCallback = function(callbackItems,isSelectAll){
+            console.log(callbackItems);
+            console.log(isSelectAll);
+        }
+    
+    });
+</script>
+<script src="multiSelectCheckbox.js"></script>
+<script src="checkboxThreeState.js"></script>
+
+</body>
+</html>

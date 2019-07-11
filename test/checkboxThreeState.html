@@ -1,0 +1,35 @@
+
+<div class="checkbox-three-state" ng-click="$ctrl.checkboxClickHandle()">
+        <img src="check1.svg" ng-if="$ctrl.checkboxState === $ctrl.checkbox_checked">
+        <img src="square1.svg" ng-if="$ctrl.checkboxState === $ctrl.checkbox_intermidate">
+        <img 
+             ng-if="$ctrl.checkboxState !== $ctrl.checkbox_checked && $ctrl.checkboxState!== $ctrl.checkbox_intermidate" 
+             style="visibility: hidden;">
+<!--
+        
+        <i ng-if="$ctrl.checkboxState === $ctrl.checkbox_checked" class="fa fa-check" aria-hidden="true"></i>
+        <i ng-if="$ctrl.checkboxState === $ctrl.checkbox_intermidate" class="fa fa-stop" aria-hidden="true"></i>
+        <i ng-if="$ctrl.checkboxState === $ctrl.checkbox_unchecked || !$ctrl.checkboxState" 
+           class="fa fa-stop" aria-hidden="true" style="visibility: hidden;"></i>
+        
+-->
+</div>
+
+<style>
+ 
+    
+.checkbox-three-state {
+    border: 1px solid red;
+    padding: 1px;
+    height: 24px;
+    width: 24px;
+    box-sizing: border-box;
+    display: inline-block
+}
+ 
+    .checkbox-three-state img{
+        width: 20px;
+        height:20px;
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
